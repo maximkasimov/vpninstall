@@ -1,6 +1,8 @@
 
 Скрипт и манифест написаны под  Ubuntu
+
 Информация про  Shadowsocks здесь https://github.com/dockage/shadowsocks-server
+
 Информация по настройке клиентов Shadowsocks - google.com
 
 1. Зайти на арендованный сервер
