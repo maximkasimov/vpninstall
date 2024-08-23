@@ -1,0 +1,97 @@
+---
+- hosts: "localhost"
+  connection: "local"
+  gather_facts: false
+  remote_user: vpn
+  become: true
+
+  tasks:
+    - name: install dependencies
+      apt:
+        name: "{{item}}"
+        state: present
+        update_cache: yes
+      loop:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - gnupg-agent
+        - software-properties-common
+        - python3-pip
+
+    - name: install python deps
+      ansible.builtin.pip:
+        name: docker
+
+    - name: add GPG key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: add docker repository to apt
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu bionic stable
+        state: present
+
+    - name: install docker
+      apt:
+        name: "{{item}}"
+        state: latest
+        update_cache: yes
+      loop:
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
+
+    - name: check docker is active
+      systemd:
+        name: docker.service
+        daemon_reload: true
+        enabled: true
+
+    - name: Ensure group "docker" exists
+      ansible.builtin.group:
+        name: docker
+        state: present
+
+    - name: adding user vpn
+      user:
+        name: vpn
+        groups:
+          - docker
+          - sudo
+        state: present
+        shell: /bin/bash
+        system: no
+        createhome: yes
+        home: /home/vpn
+        generate_ssh_key: yes
+        ssh_key_type: ed25519
+        ssh_key_file: .ssh/id_key
+
+    - name: Install docker-compose
+      get_url:
+        url: https://github.com/docker/compose/releases/download/1.29.2/docker-compose-Linux-x86_64
+        dest: /usr/local/bin/docker-compose
+        mode: 'u+x,g+x'
+
+    - name: Change file ownership, group and permissions
+      ansible.builtin.file:
+        path: /usr/local/bin/docker-compose
+        owner: vpn
+        group: vpn
+
+# please refer to https://github.com/dockage/shadowsocks-server
+
+    - name: Run shadowsocks container
+      docker_container:
+        name: shadowsocks
+        state: started
+        image: "dockage/shadowsocks-server:latest"
+        pull: true
+        restart_policy: "unless-stopped"
+        published_ports:
+          - "8388:8388"
+        env:
+            SS_PASSWORD: "S@cretP@ss"
+            SS_METHOD: "aes-256-cfb"
