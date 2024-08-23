@@ -1,5 +1,5 @@
 
-Скрипт и манифест написаны под  Ubuntu
+Ubuntu
 
 Информация про  Shadowsocks здесь https://github.com/dockage/shadowsocks-server
 
@@ -11,4 +11,7 @@
 4. sudo sh install_ansible.sh
 5. passwd vpn это если нужен этот аккаунт для входа
 
+Пароль для доступа к shadowsocks в плейбуке:
+     SS_PASSWORD: "S@cretP@ss"  ---  поменяйте на свой
 
+Порт для доступа к shadowsocks стандартный - 8388
