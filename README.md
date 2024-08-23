@@ -7,6 +7,7 @@
 
 1. Зайти на арендованный сервер
 2. sudo apt update && sudo apt upgrade -y && sudo apt install git -y
-3. sudo sh install_ansible.sh
-4. passwd vpn это если нужен этот аккаунт для входа
-5. 
+3. git clone 
+4. sudo sh install_ansible.sh
+5. passwd vpn это если нужен этот аккаунт для входа
+6. 
