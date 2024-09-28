@@ -49,37 +49,37 @@
         daemon_reload: true
         enabled: true
 
-    - name: Ensure group "docker" exists
-      ansible.builtin.group:
-        name: docker
-        state: present
+  #  - name: Ensure group "docker" exists
+  #    ansible.builtin.group:
+  #      name: docker
+  #      state: present
 
-    - name: adding user vpn
-      user:
-        name: vpn
-        groups:
-          - docker
-          - sudo
-        state: present
-        shell: /bin/bash
-        system: no
-        createhome: yes
-        home: /home/vpn
-        generate_ssh_key: yes
-        ssh_key_type: ed25519
-        ssh_key_file: .ssh/id_key
+#   - name: adding user vpn
+#      user:
+#        name: vpn
+#        groups:
+#          - docker
+#          - sudo
+#        state: present
+#        shell: /bin/bash
+#        system: no
+#        createhome: yes
+#        home: /home/vpn
+#        generate_ssh_key: yes
+#        ssh_key_type: ed25519
+#        ssh_key_file: .ssh/id_key
 
-    - name: Install docker-compose
-      get_url:
-        url: https://github.com/docker/compose/releases/download/1.29.2/docker-compose-Linux-x86_64
-        dest: /usr/local/bin/docker-compose
-        mode: 'u+x,g+x'
+   # - name: Install docker-compose
+   #   get_url:
+   #     url: https://github.com/docker/compose/releases/download/1.29.2/docker-compose-Linux-x86_64
+   #     dest: /usr/local/bin/docker-compose
+   #     mode: 'u+x,g+x'
 
-    - name: Change file ownership, group and permissions
-      ansible.builtin.file:
-        path: /usr/local/bin/docker-compose
-        owner: vpn
-        group: vpn
+   # - name: Change file ownership, group and permissions
+   #   ansible.builtin.file:
+   #     path: /usr/local/bin/docker-compose
+   #     owner: vpn
+   #     group: vpn
 
 # please refer to https://github.com/dockage/shadowsocks-server
 
